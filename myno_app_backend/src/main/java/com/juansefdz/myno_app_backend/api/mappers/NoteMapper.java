@@ -13,7 +13,7 @@ import com.juansefdz.myno_app_backend.domain.entities.Note;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface NoteMapper {
-
+    @Mapping(target = "idNote", ignore = true)
     Note toEntity(NoteRequest noteDTO);
 
     NoteResponse toResponse(Note entity);
@@ -26,6 +26,6 @@ public interface NoteMapper {
             @Mapping(target = "isActived", ignore = true),
 
     })
-    Note updateEntity(NoteUpdateRequest noteUpdateRequest,@MappingTarget Note note);
+    Note updateEntity(NoteUpdateRequest noteUpdateRequest, @MappingTarget Note note);
 
 }
