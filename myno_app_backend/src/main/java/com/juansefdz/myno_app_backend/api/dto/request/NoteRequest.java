@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NoteRequest {
 
-    private Long idNote;
     @Schema(description = "Title of the note", example = "Note 1")
     @NotBlank(message = "Title is required")
     @Size(max = 100, message = "Title must be less than 100 characters")

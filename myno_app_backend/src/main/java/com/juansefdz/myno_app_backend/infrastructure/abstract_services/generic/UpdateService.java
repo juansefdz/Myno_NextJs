@@ -1,5 +1,8 @@
 package com.juansefdz.myno_app_backend.infrastructure.abstract_services.generic;
 
-public interface UpdateService<Request, Response, Id> {
-    Response update(Id id, Request request);
+
+import com.juansefdz.myno_app_backend.api.dto.request.update.NoteUpdateRequest;
+
+public interface UpdateService<UpdateRequest, Response, Id> {
+    Response update(Id id, NoteUpdateRequest request);
 }
