@@ -1,41 +1,105 @@
+"use client";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+
 
 export default function Header() {
   return (
-    <div className="bg-white shadow ">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link
-          href="#"
-          className="text-2xl font-bold text-gray-800 hover:text-gray-600"
-        >
-          Myno APP
-        </Link>
-        <div className=" w-full flex flex-row p-3 m-3 gap-3">
-          <button className="w-full bg-blue-400 shadow-lg hover:bg-blue-500 text-white font-bold py-2 px-2 rounded inline-flex items-center justify-center">
-            Show Notes
-          </button>
-          <button className="w-full bg-green-400 shadow-lg hover:bg-green-500 text-white font-bold py-2 rounded inline-flex items-center justify-center">
-            Add Notes
-          </button>
-          <button className="w-full bg-red-400 shadow-lg hover:bg-red-500 text-white font-bold py-2 rounded inline-flex items-center justify-center">
-            Delete Notes
-          </button>
-          <button className="w-full bg-yellow-400 shadow-lg hover:bg-yellow-500 text-white font-bold py-2 rounded inline-flex items-center justify-center">
-            Update Notes
-          </button>
-          <div className="flex items-center space-x-4">
-            <Link href="#" className="text-gray-600 hover:text-gray-800">
-              Log in
-            </Link>
-            <Link
-              href="#"
-              className="px-2 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition duration-300"
-            >
-              Sign up
-            </Link>
-          </div>
+    <Popover className="container mx-auto flex items-center border-b-2 px-4 py-2 h-20 ">
+      <h1>MyNotes</h1>
+
+      <div className="grow">
+        <div className="hidden sm:flex items-center justify-center gap-2 md:gap-8">
+          <Link href="/">Home</Link>
+          <Link href="lorem1">lorem1</Link>
+          <Link href="lorem2">lorem2</Link>
+          <Link href="contact">Contact</Link>
         </div>
       </div>
-    </div>
+      <div className="flex grow items-center justify-end sm:hidden">
+        <PopoverButton
+          className={
+            "inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+          }
+        >
+          <span className="sr-only">Open Menu</span>
+          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+        </PopoverButton>
+      </div>
+
+      <PopoverPanel
+        focus
+        className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden"
+      >
+        <div className="rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 divide-y-2 divide-gray-50">
+          <div className="px-5 pt-5 pb-6">
+            <div className="flex items-center justify-between">
+              <h1>MyNotes</h1>
+              <div className="-mr-2">
+                <PopoverButton
+                  className={
+                    "inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                  }
+                >
+                  <span className="sr-only">Close Menu</span>
+                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                </PopoverButton>
+              </div>
+            </div>
+            <div className="mt-6">
+              <nav className="grid gap-y-8">
+                <Link
+                  className="focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 px-2"
+                  href="home"
+                >
+                  Home
+                </Link>
+                <Link
+                  className="focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 px-2"
+                  href="home"
+                >
+                  Home
+                </Link>
+                <Link
+                  className="focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 px-2"
+                  href="home"
+                >
+                  Home
+                </Link>
+                <Link
+                  className="focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 px-2"
+                  href="contact"
+                >
+                  Contact
+                </Link>
+              </nav>
+            </div>
+            <div className="mt-6 flex flex-col items-center gap-2">
+              <Link
+                href="register"
+                className="rounded-mg bg-white px-4 text-sm font-medium text-black md:text-xl w-full border-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500"
+              >
+                Sing Up
+              </Link>
+              <Link
+                href="register"
+                className="rounded-mg bg-white px-4 text-sm font-medium text-black md:text-xl w-full border-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500"
+              >
+                LogIn
+              </Link>
+            </div>
+          </div>
+        </div>
+      </PopoverPanel>
+      <div className="hidden sm:block">
+        <Link href="register" className="mr-2 font-bold">
+          Sing Up
+        </Link>
+        <Link href="login" className="mr-2 font-bold">
+          LogIn
+        </Link>
+      </div>
+    </Popover>
   );
 }
