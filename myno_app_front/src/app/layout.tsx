@@ -17,9 +17,7 @@ export default function RootLayout({
       <head></head>
       <body>
         <Header />
-        <div className="container items-center">
-          <main>{children}</main>
-        </div>
+        <main>{children}</main>
       </body>
     </html>
   );

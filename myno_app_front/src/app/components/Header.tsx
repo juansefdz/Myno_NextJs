@@ -10,11 +10,18 @@ export default function Header() {
       <h1>MyNotes</h1>
 
       <div className="grow">
-        <div className="hidden sm:flex items-center justify-center gap-2 md:gap-8">
-          <Link href="/">Home</Link>
-          <Link href="lorem1">lorem1</Link>
-          <Link href="lorem2">lorem2</Link>
-          <Link href="contact">Contact</Link>
+        <div className="hidden sm:flex items-center justify-center gap-2 md:gap-8 font-bold   ">
+          <Link href="/" className=" hover:text-gray-400">
+            Home
+          </Link>
+
+          <Link href="/MyTasks" className=" hover:text-gray-400">
+            My Task&apos;s
+          </Link>
+
+          <Link href="/Contact" className=" hover:text-gray-400">
+            Contact
+          </Link>
         </div>
       </div>
       <div className="flex grow items-center justify-end sm:hidden">
@@ -78,7 +85,7 @@ export default function Header() {
             <div className="mt-6 flex flex-col items-center gap-2">
               <Link
                 href="register"
-                className="rounded-mg bg-white px-4 text-sm font-medium text-black md:text-xl w-full border-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500"
+                className="rounded-mg bg-white px-4 text-sm font-medium text-black md:text-xl w-full border-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 "
               >
                 Sing Up
               </Link>
