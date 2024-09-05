@@ -2,7 +2,6 @@ package com.juansefdz.myno_app_backend.infrastructure.services;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,10 +21,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class NoteService implements INoteService {
 
-    @Autowired
     private NoteRepository noteRepository;
-
-    @Autowired
     private NoteMapper noteMapper;
 
     /*
@@ -59,7 +55,7 @@ public class NoteService implements INoteService {
     @Override
     public NoteResponse update(Long id, NoteUpdateRequest updateRequest) {
         Note noteCreated = this.find(id);
-        noteCreated = this.noteMapper.updateEntity(updateRequest,noteCreated);
+        noteCreated = this.noteMapper.updateEntity(updateRequest, noteCreated);
 
         return this.noteMapper.toResponse(noteRepository.save(noteCreated));
     }
@@ -81,6 +77,17 @@ public class NoteService implements INoteService {
 
     private Note find(Long id) {
         return noteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Note not found"));
+    }
+
+    /*
+     * ------------------------ UPDATE STATUS -----------------------------
+     */
+    @Override
+    public NoteResponse updateStatus(Long id, Boolean status) {
+        Note note = this.find(id);
+        note.setIsActived(status);
+        Note updatedNote = noteRepository.save(note);
+        return noteMapper.toResponse(updatedNote);
     }
 
 }

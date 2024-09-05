@@ -1,7 +1,10 @@
 package com.juansefdz.myno_app_backend.api.controllers;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +12,7 @@ import com.juansefdz.myno_app_backend.api.dto.errors.BaseErrorResponse;
 import com.juansefdz.myno_app_backend.api.dto.request.NoteRequest;
 import com.juansefdz.myno_app_backend.api.dto.request.update.NoteUpdateRequest;
 import com.juansefdz.myno_app_backend.api.dto.response.NoteResponse;
+
 import com.juansefdz.myno_app_backend.infrastructure.abstract_services.INoteService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +24,7 @@ import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(path = "notes")
 @AllArgsConstructor
@@ -113,7 +118,19 @@ public class NoteController {
 	})
 	@DeleteMapping("/{id}")
 	public ResponseEntity<NoteResponse> delete(@PathVariable Long id) {
-		NoteResponse deletedNote = noteService.delete(id);
-		return ResponseEntity.ok(deletedNote);
+		return ResponseEntity.ok(noteService.delete(id));
 	}
+
+	/*
+	 * ---------------------------- UPDATE STATUS -------------------------------
+	 */
+
+	@PatchMapping("/{id}/status")
+	public ResponseEntity<NoteResponse> updateStatus(@PathVariable Long id,
+			@RequestBody Map<String, Boolean> statusUpdate) {
+		Boolean status = statusUpdate.get("isActived");
+		NoteResponse updatedNote = noteService.updateStatus(id, status);
+		return ResponseEntity.ok(updatedNote);
+	}
+
 }
