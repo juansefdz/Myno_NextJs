@@ -22,19 +22,23 @@ export default function TaskCard({
   ChangeStatusTask,
 }: TaskCardProps) {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+    <div
+      className={`${
+        task.isActived ? "bg-white" : "bg-gray-300"
+      } shadow-lg rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl`}
+    >
       <div className="p-4 border-b border-gray-200">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">{task.title}</h2>
         <p className="text-gray-600 mb-4">{task.descriptionNote}</p>
         <div className="flex flex-col space-y-1 text-gray-500 text-sm">
           <p>
-            Creado el:{" "}
+            created on:{" "}
             <span className="font-medium">
               {new Date(task.createdAt).toLocaleDateString()}
             </span>
           </p>
           <p>
-            Fecha de la nota:{" "}
+            Date of Note:{" "}
             <span className="font-medium">
               {new Date(task.dateNote).toLocaleDateString()}
             </span>
@@ -44,7 +48,7 @@ export default function TaskCard({
               task.isActived ? "text-green-600" : "text-red-600"
             }`}
           >
-            Estado: {task.isActived ? "Activo" : "Inactivo"}
+            State: {task.isActived ? "available" : "Done"}
           </p>
         </div>
       </div>
@@ -54,7 +58,7 @@ export default function TaskCard({
           aria-label={`Eliminar tarea ${task.idNote}`}
           className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300"
         >
-          Eliminar
+          Delete
         </button>
         <button
           onClick={() =>
@@ -64,16 +68,20 @@ export default function TaskCard({
             })
           }
           aria-label={`Actualizar tarea ${task.idNote}`}
-          className="bg-yellow-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-yellow-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed " disabled
+          className="bg-yellow-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-yellow-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled
         >
-          Actualizar
+          Update
         </button>
         <button
           onClick={() => ChangeStatusTask(task.idNote)}
-          aria-label={`Cambiar estado de tarea ${task.idNote}`}
-          className="bg-green-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled
+          aria-label={`change status of the task ${task.idNote}`}
+          className={`${
+            task.isActived ? "bg-green-400 hover:bg-green-500" : "bg-gray-400"
+          } text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
+          disabled={!task.isActived}
         >
-          {task.isActived ? "Desactivar" : "Activar"}
+          {task.isActived ? "End Task" : "Complete"}
         </button>
       </div>
     </div>

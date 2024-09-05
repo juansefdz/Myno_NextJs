@@ -101,7 +101,7 @@ export default function MyTasks() {
       const updatedTask = { isActived: !taskToToggle.isActived };
 
       const response = await fetch(
-        `http://localhost:8080/api/v1/notes/${idNote}`,
+        `http://localhost:8080/api/v1/notes/${idNote}/status`,
         {
           method: "PATCH",
           headers: {
@@ -129,9 +129,9 @@ export default function MyTasks() {
   };
 
   return (
-    <div className="flex flex-col p-5 bg-slate-100 overflow-auto">
+    <div className="flex flex-col p-5 min-h-screen max-w-full bg-slate-100">
       <h1 className="text-2xl font-bold mb-5">My Tasks</h1>
-      <div className="flex-grow flex items-center justify-center">
+      <div className="flex-grow flex flex-col items-center justify-around ">
         {loading ? (
           <p className="text-lg">Loading tasks...</p>
         ) : (
@@ -147,22 +147,22 @@ export default function MyTasks() {
             ))}
           </div>
         )}
-      </div>
-      <div className="mt-4 flex justify-center items-center space-x-4">
-        <button
-          onClick={() => setPage((page) => Math.max(page - 1, 1))}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300  disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Previous Page
-        </button>
-        <span className="text-lg font-medium mx-4">Page {page}</span>
-        <button
-          onClick={() => setPage((page) => page + 1)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300  disabled:opacity-50 "
-          disabled={!hasMore}
-        >
-          Next Page
-        </button>
+        <div className="mt-4 flex justify-center items-center space-x-4">
+          <button
+            onClick={() => setPage((page) => Math.max(page - 1, 1))}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300  disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous Page
+          </button>
+          <span className="text-lg font-medium mx-4">Page {page}</span>
+          <button
+            onClick={() => setPage((page) => page + 1)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300  disabled:opacity-50 "
+            disabled={!hasMore}
+          >
+            Next Page
+          </button>
+        </div>
       </div>
     </div>
   );
