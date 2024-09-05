@@ -38,7 +38,7 @@ export default function MyTasks() {
   }, [page, size]);
 
   return (
-    <div className="flex flex-col  p-5 bg-slate-100">
+    <div className="flex flex-col  p-5 bg-slate-100 overflow-auto">
       <h1 className="text-2xl font-bold mb-5">My Tasks</h1>
       <div className="flex-grow flex items-center justify-center">
         {loading ? (
@@ -77,9 +77,15 @@ export default function MyTasks() {
                     </p>
                   </div>
                 </div>
-                <div className="p-4 border-t border-gray-200">
-                  <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300">
-                    View Details
+                <div className="p-2 border-t border-gray-200 flex gap-2">
+                  <button className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300">
+                    Delete
+                  </button>
+                  <button className="bg-yellow-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-yellow-500 transition-colors duration-300">
+                    Update
+                  </button>
+                  <button className="bg-green-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-500 transition-colors duration-300">
+                    Active
                   </button>
                 </div>
               </div>
@@ -94,9 +100,7 @@ export default function MyTasks() {
         >
           Previous Page
         </button>
-        <span className="text-lg font-medium mx-4">
-          Page {page}
-        </span>
+        <span className="text-lg font-medium mx-4">Page {page}</span>
         <button
           onClick={() => setPage((page) => page + 1)}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300"
