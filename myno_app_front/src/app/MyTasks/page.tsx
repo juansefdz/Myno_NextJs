@@ -1,169 +1,94 @@
-"use client";
-import { useEffect, useState } from "react";
-import Card from "./components/TaskCard";
-
-interface Task {
-  idNote: number;
-  title: string;
-  descriptionNote: string;
-  createdAt: Date;
-  dateNote: Date;
-  isActived: boolean;
-}
+"use client"
+import { useState } from "react";
+import { useTasks } from "./lib/UseTask";
+import TaskCard from "./components/TaskCard";
+import ModalUpdateTask from "./components/ModalUpdateTask";
+import { Task } from "./lib/UseTask";
 
 export default function MyTasks() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [page, setPage] = useState(1);
-  const [size] = useState(10);
-  const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
+  const {
+    tasks,
+    page,
+    loading,
+    hasMore,
+    setPage,
+    deleteTask,
+    updateTask,
+    changeStatusTask,
+  } = useTasks();
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`http://localhost:8080/api/v1/notes?page=${page}&size=${size}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setTasks(data.content);
-        setHasMore(data.content.length === size);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching tasks:", error);
-        setLoading(false);
-      });
-  }, [page, size]);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const DeleteTask = async (idNote: number) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/notes/${idNote}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (response.ok) {
-        setTasks((prevTasks) =>
-          prevTasks.filter((task) => task.idNote !== idNote)
-        );
-        console.log("Task deleted successfully");
-      } else {
-        console.error("Failed to delete task");
-      }
-    } catch (error) {
-      console.error("Error deleting task:", error);
-    }
+  const openModal = (task: Task) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
   };
 
-  const UpdateTask = async (idNote: number, updatedTask: Partial<Task>) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/notes/${idNote}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedTask),
-        }
-      );
-
-      if (response.ok) {
-        const updatedTaskFromServer = await response.json();
-
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.idNote === idNote
-              ? { ...task, ...updatedTaskFromServer }
-              : task
-          )
-        );
-        console.log("Task updated successfully");
-      } else {
-        console.error("Failed to update task");
-      }
-    } catch (error) {
-      console.error("Error updating task:", error);
-    }
+  const closeModal = () => {
+    setSelectedTask(null);
+    setIsModalOpen(false);
   };
 
-  const ChangeStatusTask = async (idNote: number) => {
-    try {
-      const taskToToggle = tasks.find((task) => task.idNote === idNote);
-
-      if (!taskToToggle) return;
-
-      const updatedTask = { isActived: !taskToToggle.isActived };
-
-      const response = await fetch(
-        `http://localhost:8080/api/v1/notes/${idNote}/status`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedTask),
-        }
-      );
-
-      if (response.ok) {
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.idNote === idNote
-              ? { ...task, isActived: !task.isActived }
-              : task
-          )
-        );
-        console.log("Task status toggled successfully");
-      } else {
-        console.error("Failed to toggle task status");
-      }
-    } catch (error) {
-      console.error("Error toggling task status:", error);
+  const handleUpdateTask = async (updatedTask: Partial<Task>) => {
+    if (selectedTask) {
+      await updateTask(selectedTask.idNote, updatedTask);
+      closeModal();
     }
   };
 
   return (
     <div className="flex flex-col p-5 min-h-screen max-w-full bg-slate-100">
       <h1 className="text-2xl font-bold mb-5">My Tasks</h1>
-      <div className="flex-grow flex flex-col items-center justify-around ">
+      <div className="flex-grow flex flex-col items-center justify-around">
         {loading ? (
           <p className="text-lg">Loading tasks...</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {tasks.map((task) => (
-              <Card
+              <TaskCard
                 key={task.idNote}
                 task={task}
-                DeleteTask={DeleteTask}
-                UpdateTask={UpdateTask}
-                ChangeStatusTask={ChangeStatusTask}
+                DeleteTask={deleteTask}
+                UpdateTask={updateTask}
+                ChangeStatusTask={changeStatusTask}
+                OpenModal={openModal}
               />
             ))}
           </div>
         )}
         <div className="mt-4 flex justify-center items-center space-x-4">
           <button
-            onClick={() => setPage((page) => Math.max(page - 1, 1))}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300  disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Previous Page
           </button>
           <span className="text-lg font-medium mx-4">Page {page}</span>
           <button
-            onClick={() => setPage((page) => page + 1)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300  disabled:opacity-50 "
+            onClick={() => setPage((prevPage) => prevPage + 1)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50"
             disabled={!hasMore}
           >
             Next Page
           </button>
         </div>
       </div>
+
+      <ModalUpdateTask isOpen={isModalOpen} onClose={closeModal}>
+        {selectedTask && (
+          <div>
+            <h1 className="text-xl font-bold mb-4">Update Task</h1>
+
+            <button
+              onClick={() => handleUpdateTask({ title: "Updated Title" })}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300"
+            >
+              Save Changes
+            </button>
+          </div>
+        )}
+      </ModalUpdateTask>
     </div>
   );
 }
